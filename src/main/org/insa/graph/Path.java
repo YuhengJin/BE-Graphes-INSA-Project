@@ -223,8 +223,11 @@ public class Path {
      * @deprecated Need to be implemented.
      */
     public double getTravelTime(double speed) {
-        // TODO:
-        return 0;
+        double time = 0;
+    	for (Arc arc : arcs) {
+        	time = time + arc.getTravelTime(speed);
+        }
+        return time;
     }
 
     /**
