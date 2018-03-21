@@ -51,7 +51,33 @@ public class Path {
     public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
         List<Arc> arcs = new ArrayList<Arc>();
-        // TODO:
+        int i;
+        for ( i=0;i<nodes.size()-1 ; i++ )
+        {
+        	List<Arc> sucesseurs = new ArrayList<Arc>();
+        	sucesseurs=nodes.get(i).getSuccessors();
+        	List<Arc> arcpossibles=new ArrayList<Arc>();
+        	for ( Arc arc: sucesseurs )
+        	{
+        		if (arc.getDestination()==nodes.get(i+1))
+        		{
+        			arcpossibles.add(arc);
+        		}
+        	}
+        	int PlusCourt=0;
+        	int numarc=0;
+        	for ( int j=0;j<arcpossibles.size(); j++)
+        	{
+        		
+        		if (arcpossibles.get(j).getLength()<PlusCourt)
+        		{
+        			PlusCourt=(int)arcpossibles.get(j).getLength();
+        			numarc=j;
+        		}
+        	}
+        		
+        arcs.add(arcpossibles.get(numarc));	
+        }
         return new Path(graph, arcs);
     }
 
@@ -244,8 +270,12 @@ public class Path {
      * @deprecated Need to be implemented.
      */
     public double getMinimumTravelTime() {
-        // TODO:
-        return 0;
+    	double time = 0;
+     	for (Arc arc : arcs) 
+     	{
+     		time = time + arc.getMinimumTravelTime();
+        }
+     	return time;
     }
 
 }
