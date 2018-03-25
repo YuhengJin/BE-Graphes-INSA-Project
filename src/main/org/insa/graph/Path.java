@@ -29,9 +29,54 @@ public class Path {
      */
     public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
-        List<Arc> arcs = new ArrayList<Arc>();
-        // TODO:
-        return new Path(graph, arcs);
+    	List<Arc> arcs = new ArrayList<Arc>();
+        if (nodes.size()<2)
+        {
+        	if (nodes.size()==0)
+        	{
+        		return new Path(graph,arcs);
+        	}
+        	else
+        	{
+        		return new Path(graph,nodes.get(0));
+        		
+        	}
+        }
+        else
+        {
+        	int i;
+        	for ( i=0;i<nodes.size()-1 ; i++ )
+        	{
+        		List<Arc> sucesseurs = new ArrayList<Arc>();
+        		sucesseurs=nodes.get(i).getSuccessors();
+        		List<Arc> arcpossibles=new ArrayList<Arc>();
+        		for ( Arc arc: sucesseurs )
+        		{
+        			if (arc.getDestination()==nodes.get(i+1))
+        			{
+        				arcpossibles.add(arc);
+        			}
+        		}
+        		if (arcpossibles.isEmpty())
+        		{
+					throw new IllegalArgumentException();
+        		}
+        		int PlusCourt=(int)arcpossibles.get(0).getMinimumTravelTime();
+        		int numarc=0;
+        		for ( int j=0;j<arcpossibles.size(); j++)
+        		{
+        		
+        			if (arcpossibles.get(j).getMinimumTravelTime()<PlusCourt)
+        			{
+        				PlusCourt=(int)arcpossibles.get(j).getMinimumTravelTime();
+        				numarc=j;
+        			}
+        		}
+        		
+        	arcs.add(arcpossibles.get(numarc));	
+        	}
+        	return new Path(graph, arcs);
+        }
     }
 
     /**
@@ -48,37 +93,58 @@ public class Path {
      * 
      * @deprecated Need to be implemented.
      */
-    public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
+    @SuppressWarnings("unused")
+	public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
+
         List<Arc> arcs = new ArrayList<Arc>();
-        int i;
-        for ( i=0;i<nodes.size()-1 ; i++ )
+        if (nodes.size()<2)
         {
-        	List<Arc> sucesseurs = new ArrayList<Arc>();
-        	sucesseurs=nodes.get(i).getSuccessors();
-        	List<Arc> arcpossibles=new ArrayList<Arc>();
-        	for ( Arc arc: sucesseurs )
+        	if (nodes.size()==0)
         	{
-        		if (arc.getDestination()==nodes.get(i+1))
-        		{
-        			arcpossibles.add(arc);
-        		}
+        		return new Path(graph,arcs);
         	}
-        	int PlusCourt=0;
-        	int numarc=0;
-        	for ( int j=0;j<arcpossibles.size(); j++)
+        	else
         	{
+        		return new Path(graph,nodes.get(0));
         		
-        		if (arcpossibles.get(j).getLength()<PlusCourt)
-        		{
-        			PlusCourt=(int)arcpossibles.get(j).getLength();
-        			numarc=j;
-        		}
         	}
-        		
-        arcs.add(arcpossibles.get(numarc));	
         }
-        return new Path(graph, arcs);
+        else
+        {
+        	int i;
+        	for ( i=0;i<nodes.size()-1 ; i++ )
+        	{
+        		List<Arc> sucesseurs = new ArrayList<Arc>();
+        		sucesseurs=nodes.get(i).getSuccessors();
+        		List<Arc> arcpossibles=new ArrayList<Arc>();
+        		for ( Arc arc: sucesseurs )
+        		{
+        			if (arc.getDestination()==nodes.get(i+1))
+        			{
+        				arcpossibles.add(arc);
+        			}
+        		}
+        		if (arcpossibles.isEmpty())
+        		{
+					throw new IllegalArgumentException();
+        		}
+        		int PlusCourt=(int)arcpossibles.get(0).getLength();
+        		int numarc=0;
+        		for ( int j=0;j<arcpossibles.size(); j++)
+        		{
+        		
+        			if (arcpossibles.get(j).getLength()<PlusCourt)
+        			{
+        				PlusCourt=(int)arcpossibles.get(j).getLength();
+        				numarc=j;
+        			}
+        		}
+        		
+        	arcs.add(arcpossibles.get(numarc));	
+        	}
+        	return new Path(graph, arcs);
+        }
     }
 
     /**
@@ -222,7 +288,7 @@ public class Path {
      * @deprecated Need to be implemented.
      */
     public boolean isValid() {
-        if (this.isEmpty()==false ||this.size()==1 ||this.origin.equals(arcs.get(0)) ) {
+        if (this.isEmpty()==true ||this.size()==1 ||this.origin.equals(arcs.get(0)) ) {
         	return true;
         
         }else if(this.size()>1){
