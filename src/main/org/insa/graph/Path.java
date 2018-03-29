@@ -47,10 +47,8 @@ public class Path {
         	int i;
         	for ( i=0;i<nodes.size()-1 ; i++ )
         	{
-        		List<Arc> sucesseurs = new ArrayList<Arc>();
-        		sucesseurs=nodes.get(i).getSuccessors();
         		List<Arc> arcpossibles=new ArrayList<Arc>();
-        		for ( Arc arc: sucesseurs )
+        		for ( Arc arc: nodes.get(i) )
         		{
         			if (arc.getDestination()==nodes.get(i+1))
         			{
@@ -115,10 +113,9 @@ public class Path {
         	int i;
         	for ( i=0;i<nodes.size()-1 ; i++ )
         	{
-        		List<Arc> sucesseurs = new ArrayList<Arc>();
-        		sucesseurs=nodes.get(i).getSuccessors();
+        	
         		List<Arc> arcpossibles=new ArrayList<Arc>();
-        		for ( Arc arc: sucesseurs )
+        		for ( Arc arc: nodes.get(i) )
         		{
         			if (arc.getDestination()==nodes.get(i+1))
         			{
