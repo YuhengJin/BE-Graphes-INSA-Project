@@ -3,14 +3,14 @@ package org.insa.graph;
 public class Label {
 
 	private double cost;
-	private int fatherId;
+	private Node father;
 	private boolean mark;
 	private Node node;
 	private static int nbMark=0;
 
-	public Label(double cost, int fatherId, Node node) {
+	public Label(double cost, Node father, Node node) {
 		this.cost = cost;
-		this.fatherId = fatherId;
+		this.father = father;
 		this.node=node;
 		this.mark = false;
 	}
@@ -28,10 +28,15 @@ public class Label {
 	{
 		this.cost=cost;
 	}
-
-	public void setFather(int fatherId)
+	public double getCost()
 	{
-		this.fatherId=fatherId;
+		return this.cost;
+	}
+	
+
+	public void setFather(Node n)
+	{
+		this.father=n;
 	}
 	public static int getNbMark()
 	{
@@ -43,6 +48,10 @@ public class Label {
 		return this.mark;
 	}
 	
+	public Node getFather()
+	{
+		return this.father;
+	}
 	
 	
 }
