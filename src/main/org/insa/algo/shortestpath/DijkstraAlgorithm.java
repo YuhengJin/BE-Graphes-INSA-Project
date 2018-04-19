@@ -35,17 +35,21 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         // Initialisation
         for ( int i=0; i<nbNodes; i++)
         {
-        labelList[i]=new Label(Double.POSITIVE_INFINITY,null,nodes.next());
+        	labelList[i]=new Label(Double.POSITIVE_INFINITY,null,nodes.next());
         }
         labelList[data.getOrigin().getId()] = new Label(0,null,data.getOrigin());
-        BinaryHeap<Node> tas = new BinaryHeap<Node>();
         
-        tas.insert(data.getOrigin());
+        // Notify observers about the first event (origin processed).
+     	notifyOriginProcessed(data.getOrigin());
+        
+        BinaryHeap<Label> tas = new BinaryHeap<Label>();
+        
+        tas.insert(labelList[data.getOrigin().getId()]);
         
         // Algorithme
         
         int cmp = 0;
-        while(tas.size()!=0)
+        while(tas.size()!=0 && Label.getNbMark()<nbNodes)
         {
         	double costNodeMin=0;
         	
@@ -53,43 +57,32 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         	System.out.println(tas.size());
         	cmp++;
         	
-        	Node nodeMin = tas.deleteMin();
-        	notifyNodeMarked(nodeMin);
-        	for(Label label : labelList) {
-        		if(label.getNode().equals(nodeMin))
-        		{
-        			label.setMark();
-        			costNodeMin=label.getCost();
-        			break;
-        		}
-        	}
-        	for ( Arc arc : nodeMin)
+        	Label nodeMin = tas.deleteMin();
+        	notifyNodeMarked(nodeMin.getNode());
+        	nodeMin.setMark();
+        	costNodeMin=nodeMin.getCost();
+        	for ( Arc arc : nodeMin.getNode())
         	{
     			
-        		Node nodeSuiv = arc.getDestination();
-             	for(Label label : labelList) {
-            		if(label.getNode().equals(nodeSuiv))
-            		{	double costPre = label.getCost();
-            			if (label.getMark()==false)
-            			{
+        		int nodeSuiv = arc.getDestination().getId();
+             
+            	double costPre = labelList[nodeSuiv].getCost();
+            	if (labelList[nodeSuiv].getMark()==false)
+            	{
             				
-            				label.setCost(ValeurMin(costPre,costNodeMin + data.getCost(arc)));
-            			}
-            			if(label.getCost() != costPre ) {
-            				tas.insert(label.getNode());
-            				label.setFather(nodeMin);
-            			}
-
+           			labelList[nodeSuiv].setCost(ValeurMin(costPre,costNodeMin + data.getCost(arc)));
             			
-            			}
+           			if(labelList[nodeSuiv].getCost() != costPre ) {
+           					tas.insert(labelList[nodeSuiv]);
+          					labelList[nodeSuiv].setFather(nodeMin.getNode());
+          				}
             				
-            		}
+            			
+        			}
+            				
+           		}
         		
         	}
-        	
-        	
-        	
-        }
         // Recouvrement du chemin
         Node nodedest = data.getDestination();
         Node currentNode = nodedest ;
