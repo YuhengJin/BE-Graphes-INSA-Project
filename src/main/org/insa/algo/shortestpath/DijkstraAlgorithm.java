@@ -1,6 +1,6 @@
 package org.insa.algo.shortestpath;
-import java.lang.Math.*;
 import java.util.*;
+
 
 import org.insa.algo.AbstractSolution.Status;
 import org.insa.algo.utils.BinaryHeap;
@@ -26,11 +26,15 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     protected ShortestPathSolution doRun() {
         ShortestPathData data = getInputData();
         ShortestPathSolution solution = null;
-        
+        Node nodedest = data.getDestination();
         Graph graph = data.getGraph();
         final int nbNodes = graph.size();
         Iterator<Node> nodes = graph.iterator();
         Label[] labelList = new Label[nbNodes];
+        Node currentNode = nodedest ;
+        ArrayList<Node> nodesFinal = new ArrayList<Node>();
+        Node nodeorigin =data.getOrigin();
+        
         
         // Initialisation
         for ( int i=0; i<nbNodes; i++)
@@ -49,7 +53,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         // Algorithme
         
         int cmp = 0;
-        while(tas.size()!=0 && Label.getNbMark()<nbNodes)
+        while(tas.size()!=0)
         {
         	double costNodeMin=0;
         	
@@ -62,17 +66,20 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         	nodeMin.setMark();
         	costNodeMin=nodeMin.getCost();
         	for ( Arc arc : nodeMin.getNode())
-        	{
-    			
-        		int nodeSuiv = arc.getDestination().getId();
+        	{	
+        		
+    			if (data.isAllowed(arc)==true )
+    			{
+        			int nodeSuiv = arc.getDestination().getId();
              
-            	double costPre = labelList[nodeSuiv].getCost();
-            	if (labelList[nodeSuiv].getMark()==false)
-            	{
+            		double costPre = labelList[nodeSuiv].getCost();
+            		if (labelList[nodeSuiv].getMark()==false)
+            		{
             				
-           			labelList[nodeSuiv].setCost(ValeurMin(costPre,costNodeMin + data.getCost(arc)));
+            			labelList[nodeSuiv].setCost(ValeurMin(costPre,costNodeMin + data.getCost(arc)));
             			
-           			if(labelList[nodeSuiv].getCost() != costPre ) {
+            			if(labelList[nodeSuiv].getCost() != costPre ) 
+            			{
            					tas.insert(labelList[nodeSuiv]);
           					labelList[nodeSuiv].setFather(nodeMin.getNode());
           				}
@@ -81,18 +88,22 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         			}
             				
            		}
-        		
+        			if (nodeMin.getNode().compareTo(nodedest)==0)
+        			{
+        				break;
+        			}
+	        	}
+	        		
         	}
         // Recouvrement du chemin
-        Node nodedest = data.getDestination();
-        Node currentNode = nodedest ;
-        ArrayList<Node> nodesFinal = new ArrayList<Node>();
-        Node nodeorigin =data.getOrigin();
         
-        while(currentNode.equals(nodeorigin)==false)
+ 
+        System.out.println(" -----FIN-BOUCLE------ ");
+        
+        while(currentNode.compareTo(nodeorigin)!=0)
         {
         	for(Label label : labelList) {
-        		if(label.getNode().equals(currentNode))
+        		if(label.getNode().compareTo(currentNode)==0)
         		{
         			nodesFinal.add(currentNode);
         			currentNode=label.getFather();
@@ -102,11 +113,16 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         }
         nodesFinal.add(nodeorigin);
         Collections.reverse(nodesFinal);
+        tas=null;
         // Create the final solution.
-     	solution = new ShortestPathSolution(data, Status.OPTIMAL, Path.createShortestPathFromNodes(graph,nodesFinal));
+        if (data.getMode().equals("LENGTH")) {
+        	solution = new ShortestPathSolution(data, Status.OPTIMAL, Path.createShortestPathFromNodes(graph,nodesFinal));
+        }else {
+        	solution = new ShortestPathSolution(data, Status.OPTIMAL, Path.createFastestPathFromNodes(graph,nodesFinal));
+        }
      		
         
         return solution;
     }
-
+        
 }
