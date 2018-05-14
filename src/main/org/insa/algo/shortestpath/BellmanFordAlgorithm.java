@@ -11,11 +11,12 @@ import org.insa.graph.Node;
 import org.insa.graph.Path;
 
 public class BellmanFordAlgorithm extends ShortestPathAlgorithm {
-
+	
+	ShortestPathSolution solution = null;
 	public BellmanFordAlgorithm(ShortestPathData data) {
 		super(data);
 	}
-
+	
 	@Override
 	protected ShortestPathSolution doRun() {
 
@@ -68,7 +69,7 @@ public class BellmanFordAlgorithm extends ShortestPathAlgorithm {
 			}
 		}
 
-		ShortestPathSolution solution = null;
+		
 
 		// Destination has no predecessor, the solution is infeasible...
 		if (predecessorArcs[data.getDestination().getId()] == null) {
@@ -96,4 +97,8 @@ public class BellmanFordAlgorithm extends ShortestPathAlgorithm {
 		return solution;
 	}
 
+	 public Path getSolution() {
+	    	return (solution.getPath());
+	    	
+	    }
 }

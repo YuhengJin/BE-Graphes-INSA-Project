@@ -10,6 +10,7 @@ import org.insa.graph.*;
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	
 	
+	ShortestPathSolution solution = null;
 	public double ValeurMin (double a, double b)  {
 		if(a<=b) {
 			return a;
@@ -25,13 +26,12 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     @Override
     protected ShortestPathSolution doRun() {
         ShortestPathData data = getInputData();
-        ShortestPathSolution solution = null;
         Node nodedest = data.getDestination();
         Graph graph = data.getGraph();
         final int nbNodes = graph.size();
         Iterator<Node> nodes = graph.iterator();
         Label[] labelList = new Label[nbNodes];
-        Node currentNode = nodedest ;
+        
         ArrayList<Node> nodesFinal = new ArrayList<Node>();
         Node nodeorigin =data.getOrigin();
         
@@ -95,9 +95,9 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         System.out.println(" -----FIN-BOUCLE------ ");
         
  
-        
+        Node currentNode = data.getDestination();
         // Recouvrement du chemin
-        while(currentNode.compareTo(nodeorigin)!=0)
+        while(currentNode.equals(data.getOrigin())==false)
         {
         	for(Label label : labelList) {
         		if(label.getNode().compareTo(currentNode)==0)
@@ -122,6 +122,11 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
      		
         
         return solution;
+    }
+    
+    public Path getSolution() {
+    	return (solution.getPath());
+    	
     }
         
 }
