@@ -95,18 +95,20 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         System.out.println(" -----FIN-BOUCLE------ ");
         
  
-        Node currentNode = data.getDestination();
+        int currentNode = data.getDestination().getId();
         // Recouvrement du chemin
-        while(currentNode.equals(data.getOrigin())==false)
+        while(labelList[currentNode].getFather()!=null)
         {
-        	for(Label label : labelList) {
-        		if(label.getNode().compareTo(currentNode)==0)
-        		{
-        			nodesFinal.add(currentNode);
-        			currentNode=label.getFather();
-        			break;
-        		}
-        	}
+ 
+        			nodesFinal.add(labelList[currentNode].getNode());
+        			currentNode=labelList[currentNode].getFather().getId();
+        	
+        }
+        if (labelList[currentNode].getNode().equals(data.getOrigin())==false)
+        {
+        	
+        	solution = new ShortestPathSolution(data, Status.INFEASIBLE);
+        	return solution;
         }
         // The destination has been found, notify the observers.
         notifyDestinationReached(data.getDestination());
@@ -124,9 +126,5 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         return solution;
     }
     
-    public Path getSolution() {
-    	return (solution.getPath());
-    	
-    }
         
 }

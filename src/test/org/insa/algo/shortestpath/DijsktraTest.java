@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.insa.algo.AbstractSolution.Status;
 import org.insa.algo.ArcInspector;
 import org.insa.algo.ArcInspectorFactory;
 import org.insa.graph.Arc;
@@ -25,11 +26,11 @@ public class DijsktraTest {
 
     // List of arcs in the graph, a2b is the arc from node A (0) to B (1).
     @SuppressWarnings("unused")
-    private static Arc a2b, a2c, b2d, b2e, c2a, c2b, c2f, f2e, e2f, e2d, e2c;
+    private static Arc a2b, a2c, b2d, b2e, b2f,c2a, c2b, c2f, f2e, e2f, e2d, e2c;
 
     // Some paths...
-    private static ArrayList<DijkstraAlgorithm> listeD = new ArrayList<DijkstraAlgorithm>();
-    private static ArrayList<BellmanFordAlgorithm> listeB = new ArrayList<BellmanFordAlgorithm>();
+    private static ArrayList<ShortestPathSolution> listeD = new ArrayList<ShortestPathSolution>();
+    private static ArrayList<ShortestPathSolution> listeB = new ArrayList<ShortestPathSolution>();
 	
     @BeforeClass
     public static void initAll() throws IOException {
@@ -47,8 +48,9 @@ public class DijsktraTest {
         // Add arcs...
         a2b = Node.linkNodes(nodes[0], nodes[1], 7, speed10, null);
         a2c = Node.linkNodes(nodes[0], nodes[2], 8, speed10, null); 
-        b2d = Node.linkNodes(nodes[0], nodes[3], 4, speed10, null);
+        b2d = Node.linkNodes(nodes[1], nodes[3], 4, speed10, null);
         b2e = Node.linkNodes(nodes[1], nodes[4], 1, speed10, null);
+        b2f = Node.linkNodes(nodes[1], nodes[5], 5, speed10, null);
         c2a = Node.linkNodes(nodes[2], nodes[0], 7, speed10, null);
         c2b = Node.linkNodes(nodes[2], nodes[1], 2, speed10, null);
         c2f = Node.linkNodes(nodes[2], nodes[5], 2, speed10, null);
@@ -66,7 +68,7 @@ public class DijsktraTest {
         			new ArcInspectorFactory();
 					ArcInspector arcInspector = ArcInspectorFactory.getAllFilters().get(0);
         			ShortestPathData data= new ShortestPathData(graph,nodeact,nodeact2, arcInspector);
-        			listeD.add( new DijkstraAlgorithm(data));
+        			listeD.add( new DijkstraAlgorithm(data).doRun());
         		}
         }
         
@@ -79,19 +81,33 @@ public class DijsktraTest {
         			new ArcInspectorFactory();
 					ArcInspector arcInspector = ArcInspectorFactory.getAllFilters().get(0);
         			ShortestPathData data= new ShortestPathData(graph,nodeact,nodeact2, arcInspector);
-        			listeB.add(new BellmanFordAlgorithm(data));
+        			listeB.add(new BellmanFordAlgorithm(data).doRun());
         		}
         }
         
     }
     
-    @Test
+    @Test // Comparaison de toutes les solutions trouvées par Dijkstra avec celles de Bellman-Ford
     public void ComparaisonBD() {
     	System.out.println(listeD.size());
+    	int cpt=1;
     	for (int i=0; i<listeD.size(); i++)
     	{
-    		System.out.println(i);
-    		assertEquals(listeD.get(i).doRun().getPath().getLength(),listeB.get(i).doRun().getPath().getLength(), 0);
+    		if ((i)%5==0)
+    		{
+    			System.out.print("x"+cpt + ": ");
+    		}
+    		assertEquals(listeD.get(i).getStatus(),listeB.get(i).getStatus());
+    		if (listeD.get(i).getStatus()==Status.OPTIMAL)
+    		{
+    			assertEquals(listeD.get(i).getPath().getLength(),listeB.get(i).getPath().getLength(),0);
+    			System.out.print(" "+listeD.get(i).getPath().getLength()+ " ");
+    		}
+    		if ((i+1)%5==0)
+    		{
+    			System.out.println();
+    			cpt++;
+    		}
     	}
     }
     
