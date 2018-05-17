@@ -45,10 +45,18 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         
         // Notify observers about the first event (origin processed).
      	notifyOriginProcessed(data.getOrigin());
-        
+       
+     	// Initialisation du tas
         BinaryHeap<Label> tas = new BinaryHeap<Label>();
-        
         tas.insert(labelList[data.getOrigin().getId()]);
+        
+        // On verifie que le départ ne soit pas égal à l'arrivée
+        if (data.getOrigin().getId()==nodedest.getId())
+        {
+        	
+        	solution = new ShortestPathSolution(data, Status.INFEASIBLE);
+        	return solution;
+        }
         
         // Algorithme
         int cmp = 0;
@@ -56,8 +64,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         {
         	double costNodeMin=0;
         	
-        	System.out.println(cmp);
-        	System.out.println(tas.size());
         	cmp++;
         	
         	Label nodeMin = tas.deleteMin();
@@ -92,8 +98,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	        		
         	}
         
-        System.out.println(" -----FIN-BOUCLE------ ");
-        
  
         int currentNode = data.getDestination().getId();
         // Recouvrement du chemin
@@ -118,7 +122,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         // Create the final solution.
         if (data.getMode().equals("LENGTH")) {
         	solution = new ShortestPathSolution(data, Status.OPTIMAL, Path.createShortestPathFromNodes(graph,nodesFinal));
-        }else {
+        }
+        else {
         	solution = new ShortestPathSolution(data, Status.OPTIMAL, Path.createFastestPathFromNodes(graph,nodesFinal));
         }
      		
