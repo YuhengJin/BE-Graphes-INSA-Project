@@ -18,6 +18,23 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 			return b;
 		}
 	}
+	
+	public Label[] initList() // Fonction pour initialiser la liste des labels initiaux que l'on pourra redéfinir pour A*
+	{
+		ShortestPathData data = getInputData();
+		Graph graph = data.getGraph();
+		final int nbNodes = graph.size();
+		Label[] labelList = new Label[nbNodes];
+		Iterator<Node> nodes = graph.iterator();
+		for ( int i=0; i<nbNodes; i++)
+	    {
+	        labelList[i]=new Label(Double.POSITIVE_INFINITY,null,nodes.next());
+	    }
+	    labelList[data.getOrigin().getId()] = new Label(0,null,data.getOrigin());
+	    return labelList;    
+		
+		
+	}
 
     public DijkstraAlgorithm(ShortestPathData data) throws EmptyPriorityQueueException {
         super(data);
@@ -29,27 +46,21 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         Node nodedest = data.getDestination();
         Graph graph = data.getGraph();
         final int nbNodes = graph.size();
-        Iterator<Node> nodes = graph.iterator();
-        Label[] labelList = new Label[nbNodes];
+      
+
         
         ArrayList<Node> nodesFinal = new ArrayList<Node>();
         Node nodeorigin =data.getOrigin();
         
         
         // Initialisation
-        for ( int i=0; i<nbNodes; i++)
-        {
-        	labelList[i]=new Label(Double.POSITIVE_INFINITY,null,nodes.next());
-        }
-        labelList[data.getOrigin().getId()] = new Label(0,null,data.getOrigin());
-        
+        Label[] labelList=initList();
         // Notify observers about the first event (origin processed).
      	notifyOriginProcessed(data.getOrigin());
        
      	// Initialisation du tas
-        BinaryHeap<Label> tas = new BinaryHeap<Label>();
+     	BinaryHeap<Label> tas = new BinaryHeap<Label>();
         tas.insert(labelList[data.getOrigin().getId()]);
-        
         // On verifie que le départ ne soit pas égal à l'arrivée
         if (data.getOrigin().getId()==nodedest.getId())
         {

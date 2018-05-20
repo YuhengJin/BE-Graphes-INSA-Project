@@ -52,14 +52,20 @@ public class Label implements Comparable<Label>{
 	{
 		return this.father;
 	}
+	
+
+	public double getTotalCost()
+	{
+		return this.cost;
+	}
 
 	@Override
 	public int compareTo(Label label) {
-		if  ( this.cost < label.cost )
+		if  ( this.getTotalCost() < label.getTotalCost() )
 			return -1;
 		else
 		{
-			if  ( this.cost == label.cost )
+			if  ( this.getTotalCost() == label.getTotalCost() )
 				return 0;
 			
 			else 

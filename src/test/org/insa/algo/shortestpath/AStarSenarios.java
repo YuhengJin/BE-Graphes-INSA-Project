@@ -16,7 +16,7 @@ import org.insa.graph.io.BinaryGraphReader;
 import org.insa.graph.io.GraphReader;
 import org.junit.Test;
 
-public class DijsktraSenarios {
+public class AStarSenarios {
 
 	private static Graph graph ;
 	
@@ -39,7 +39,7 @@ public class DijsktraSenarios {
 	ArcInspector arcInspector = ArcInspectorFactory.getAllFilters().get(0);
 	ShortestPathData data = new ShortestPathData(graph,graph.get(344),graph.get(344),arcInspector);
 	ShortestPathSolution B =new BellmanFordAlgorithm(data).run();
-	ShortestPathSolution D =new DijkstraAlgorithm(data).run();
+	ShortestPathSolution D =new AStarAlgorithm(data).run();
 	
 	assertEquals(D.getStatus(),B.getStatus());
 	
@@ -61,7 +61,7 @@ public class DijsktraSenarios {
 			System.out.println("Depart : "+nb1+" Destination : "+nb2);
 			ShortestPathData data = new ShortestPathData(graph,graph.get(nb1),graph.get(nb2),arcInspector);
 			ShortestPathSolution B =new BellmanFordAlgorithm(data).run();
-			ShortestPathSolution D =new DijkstraAlgorithm(data).run();
+			ShortestPathSolution D =new AStarAlgorithm(data).run();
     		
 			assertEquals(D.getStatus(),B.getStatus());
 			if (D.getStatus()==Status.OPTIMAL)
@@ -89,7 +89,7 @@ public class DijsktraSenarios {
 			System.out.println("Depart : "+nb1+" Destination : "+nb2);
 			ShortestPathData data = new ShortestPathData(graph,graph.get(nb1),graph.get(nb2),arcInspector);
 			ShortestPathSolution B =new BellmanFordAlgorithm(data).run();
-			ShortestPathSolution D =new DijkstraAlgorithm(data).run();
+			ShortestPathSolution D =new AStarAlgorithm(data).run();
     		
 			assertEquals(D.getStatus(),B.getStatus());
 			if (D.getStatus()==Status.OPTIMAL)
