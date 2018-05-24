@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.insa.algo.AbstractSolution.Status;
 import org.insa.algo.utils.BinaryHeap;
+import org.insa.algo.utils.ElementNotFoundException;
 import org.insa.algo.utils.EmptyPriorityQueueException;
 import org.insa.graph.*;
 
@@ -90,13 +91,21 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             		double costPre = labelList[nodeSuiv].getCost();
             		if (labelList[nodeSuiv].getMark()==false)
             		{
-            			labelList[nodeSuiv].setCost(ValeurMin(costPre,costNodeMin + data.getCost(arc)));
+            			//labelList[nodeSuiv].setCost(ValeurMin(costPre,costNodeMin + data.getCost(arc)));
             			
-            			if(labelList[nodeSuiv].getCost() != costPre ) 
+            			if(costPre> costNodeMin + data.getCost(arc)) 
             			{
+           					if (labelList[nodeSuiv].getstatusTas()==1)
+           					{
+           						try {tas.remove(labelList[nodeSuiv]);}
+           						catch (ElementNotFoundException e) {}
+           					}
+          					labelList[nodeSuiv].setCost(costNodeMin + data.getCost(arc));
+          					labelList[nodeSuiv].estDansLeTas();
+           					labelList[nodeSuiv].setFather(nodeMin.getNode());
            					tas.insert(labelList[nodeSuiv]);
-          					labelList[nodeSuiv].setFather(nodeMin.getNode());
-          					notifyNodeReached(arc.getDestination());
+           					notifyNodeReached(arc.getDestination());	
+           					
           				}
         			}
             				

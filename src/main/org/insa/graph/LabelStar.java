@@ -23,8 +23,15 @@ public class LabelStar extends Label {
 		}
 		else
 		{
-		double cost = this.getCost() + (this.getNode().getPoint().distanceTo(destination.getPoint()))/(this.Speed/3.6);
-		return cost;	
+		if (this.Speed!=-1)
+			{
+			double cost = this.getCost() + (this.getNode().getPoint().distanceTo(destination.getPoint())/this.Speed/3.6);
+			return cost;
+			}
+		else
+			{
+			return this.getCost();
+			}
 		}
 	}
 }
