@@ -84,7 +84,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         	costNodeMin=nodeMin.getCost();
         	for ( Arc arc : nodeMin.getNode())
         	{	
-    			if (data.isAllowed(arc)==true )
+    			if (data.isAllowed(arc))
     			{
         			int nodeSuiv = arc.getDestination().getId();
              
@@ -95,13 +95,12 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             			
             			if(costPre> costNodeMin + data.getCost(arc)) 
             			{
-           					if (labelList[nodeSuiv].getstatusTas()==1)
-           					{
-           						try {tas.remove(labelList[nodeSuiv]);}
-           						catch (ElementNotFoundException e) {}
-           					}
+           					//if (labelList[nodeSuiv].getstatusTas()==1)
+           					//{
+           						//try {tas.remove(labelList[nodeSuiv]);}
+           						//catch (ElementNotFoundException e) {}
+           					//}
           					labelList[nodeSuiv].setCost(costNodeMin + data.getCost(arc));
-          					labelList[nodeSuiv].estDansLeTas();
            					labelList[nodeSuiv].setFather(nodeMin.getNode());
            					tas.insert(labelList[nodeSuiv]);
            					notifyNodeReached(arc.getDestination());	
@@ -140,7 +139,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         Collections.reverse(nodesFinal);
         tas=null;
         // Create the final solution.
-        if (data.getMode().equals("LENGTH")) {
+        if (data.getMode().name()=="LENGTH") {
         	solution = new ShortestPathSolution(data, Status.OPTIMAL, Path.createShortestPathFromNodes(graph,nodesFinal));
         }
         else {
