@@ -11,14 +11,7 @@ import org.insa.graph.*;
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	
 	
-	ShortestPathSolution solution = null;
-	public double ValeurMin (double a, double b)  {
-		if(a<=b) {
-			return a;
-		}else {
-			return b;
-		}
-	}
+
 	
 	public Label[] initList() // Fonction pour initialiser la liste des labels initiaux que l'on pourra redéfinir pour A*
 	{
@@ -46,11 +39,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         ShortestPathData data = getInputData();
         Node nodedest = data.getDestination();
         Graph graph = data.getGraph();
-        final int nbNodes = graph.size();
-      
-
-        
-        ArrayList<Node> nodesFinal = new ArrayList<Node>();
+        int maxTas=0; // Nb d'éléments max dans le tas
+        int nbVisite=0; //Nb de nodes visités
+    	ShortestPathSolution solution = null;               // Création de la structure pour retourner la solution finale
+        ArrayList<Node> nodesFinal = new ArrayList<Node>(); //Création de la liste qui contiendra les nodes du chemin final trouvé
         Node nodeorigin =data.getOrigin();
         
         
@@ -71,12 +63,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         }
         
         // Algorithme
-        int cmp = 0;
         while(tas.size()!=0)
         {
         	double costNodeMin=0;
-        	
-        	cmp++;
+        	if (tas.size()>maxTas) maxTas=tas.size();
         	
         	Label nodeMin = tas.deleteMin();
         	notifyNodeMarked(nodeMin.getNode());
@@ -84,7 +74,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         	costNodeMin=nodeMin.getCost();
         	for ( Arc arc : nodeMin.getNode())
         	{	
-    			if (data.isAllowed(arc))
+    			nbVisite++;
+        		if (data.isAllowed(arc))
     			{
         			int nodeSuiv = arc.getDestination().getId();
              
@@ -110,14 +101,14 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             				
            		}
 	        	}
-        	if (nodeMin.getNode().compareTo(nodedest)==0)
+        	if (nodeMin.getNode().compareTo(nodedest)==0) //Si le dernier node visité est la destination on stoppe l'algo 
         	{
         		break;
         	}
 	        		
         	}
         
- 
+
         int currentNode = data.getDestination().getId();
         // Recouvrement du chemin
         while(labelList[currentNode].getFather()!=null)
@@ -137,7 +128,9 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         notifyDestinationReached(data.getDestination());
         nodesFinal.add(nodeorigin);
         Collections.reverse(nodesFinal);
-        tas=null;
+        // Renvoie des stats
+        System.out.println("TasMax :"+ maxTas);
+        System.out.println("Nb nodes visités : "+ nbVisite);	
         // Create the final solution.
         if (data.getMode().name()=="LENGTH") {
         	solution = new ShortestPathSolution(data, Status.OPTIMAL, Path.createShortestPathFromNodes(graph,nodesFinal));

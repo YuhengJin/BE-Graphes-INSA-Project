@@ -6,14 +6,14 @@ public class Label implements Comparable<Label>{
 	private Node father;
 	private boolean mark;
 	private Node node;
-	private int statusTas; // 1 si déja dans le tas, 0 sinon
+	//private int statusTas; // 1 si déja dans le tas, 0 sinon
 	private static int nbMark=0;
 
 	public Label(double cost, Node father, Node node) {
 		this.cost = cost;
 		this.father = father;
 		this.node=node;
-		this.statusTas=0;
+		//this.statusTas=0;
 		this.mark = false;
 	}
 	
@@ -55,7 +55,7 @@ public class Label implements Comparable<Label>{
 		return this.father;
 	}
 	
-	public int getstatusTas()
+	/*public int getstatusTas()
 	{
 		return this.statusTas;
 	}
@@ -63,7 +63,7 @@ public class Label implements Comparable<Label>{
 	public void estDansLeTas()
 	{
 		this.statusTas=1;
-	}
+	}*/
 	
 
 	public double getTotalCost()
