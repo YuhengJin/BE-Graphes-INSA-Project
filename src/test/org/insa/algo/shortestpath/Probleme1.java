@@ -6,12 +6,14 @@ import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import org.insa.algo.ArcInspector;
 import org.insa.algo.ArcInspectorFactory;
+import org.insa.graph.Arc;
 import org.insa.graph.Graph;
 import org.insa.graph.Path;
 import org.insa.graph.io.BinaryGraphReader;
@@ -19,6 +21,7 @@ import org.insa.graph.io.GraphReader;
 import org.insa.graph.io.PathReader;
 import org.insa.graphics.drawing.Drawing;
 import org.insa.graphics.drawing.components.BasicDrawing;
+import org.junit.Test;
 
 public class Probleme1 {
 
@@ -38,7 +41,7 @@ public class Probleme1 {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public static ShortestPathSolution SolutionPb1(int debut1,int debut2,int fin,String map) throws IOException { // Point de départ et d'arrivé identiques
+	public static void SolutionPb1(int debut1,int debut2,int fin,String map) throws IOException { // Point de départ et d'arrivé identiques
 		initAll(map);
 		new ArcInspectorFactory();
 		
@@ -52,68 +55,36 @@ public class Probleme1 {
 		ShortestPathSolution court = null;
 		ShortestPathSolution plusLong = null;
 		int debut=0;
-		ShortestPathSolution minFinal = null;
+		int minFinal = 0;
 		if (D1.getPath().getMinimumTravelTime()<D2.getPath().getMinimumTravelTime()) { court = D1; plusLong=D2; debut=debut2; }
 		else { court = D2; plusLong=D1; debut=debut1;}
 		double tempsCourt=0;
 		double temps1=court.getPath().getMinimumTravelTime();
 		double Min = D1.getPath().getMinimumTravelTime() + D2.getPath().getMinimumTravelTime();
-		for (int i=0; i<court.getPath().getGraph().size() ; i++)
+		List<Arc> arcsCourt = court.getPath().getArcs();
+		for (int i=0; i<arcsCourt.size() ; i++)
 		{
 			
-			ShortestPathData dataCourt = new ShortestPathData(graph,graph.get(debut),graph.get(court.getPath().getGraph().get(i).getId()),arcInspector1);
+			ShortestPathData dataCourt = new ShortestPathData(graph,graph.get(debut),arcsCourt.get(i).getDestination(),arcInspector1);
 			ShortestPathSolution solutionCourt =new DijkstraAlgorithm(dataCourt).run();
 			tempsCourt = (solutionCourt.getPath().getMinimumTravelTime() + temps1);
 			if (tempsCourt<Min) 
 			{
-				minFinal=solutionCourt;
+				minFinal=arcsCourt.get(i).getDestination().getId();
 				Min=tempsCourt;
 				
 			}
 			
 		}
 		
-		return minFinal ;
+		System.out.println("Le point de rencontre est "+ minFinal);
 		
 	}
 	
-	public static Drawing createDrawing() throws Exception {
-        BasicDrawing basicDrawing = new BasicDrawing();
-        SwingUtilities.invokeAndWait(new Runnable() {
-            @Override
-            public void run() {
-                JFrame frame = new JFrame("BE Graphes - Launch");
-                frame.setLayout(new BorderLayout());
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setVisible(true);
-                frame.setSize(new Dimension(800, 600));
-                frame.setContentPane(basicDrawing);
-                frame.validate();
-            }
-        });
-        return basicDrawing;
-    }
+	@Test
+	public void	trouveSolution() throws IOException {
+	SolutionPb1(113873,73074,237328,"midi-pyrenees");	// 73071
+		
+	}
 
-    public static void main(String[] args) throws Exception {
-
-        // Visit these directory to see the list of available files on Commetud.
-    	ShortestPathSolution sol = SolutionPb1(50,70, 120,"insa");
-
-        // TODO: Read the graph.
-        Graph graph = sol.getPath().getGraph();
-
-        // Create the drawing:
-        Drawing drawing = createDrawing();
-
-        // TODO: Draw the graph on the drawing.
-
-        // TODO: Create a PathReader.
-        PathReader pathReader = null;
-
-        // TODO: Read the path.
-        Path path = sol.getPath();
-
-        // TODO: Draw the path.
-
-    }
 }
