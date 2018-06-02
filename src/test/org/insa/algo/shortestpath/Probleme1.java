@@ -54,44 +54,84 @@ public class Probleme1 {
 		ShortestPathSolution D2 =new DijkstraAlgorithm(data2).run();
 		ShortestPathSolution court = null;
 		ShortestPathSolution plusLong = null;
+		int debutprincipal=0;
 		int debut=0;
-		int minFinal = 0;
-		if (D1.getPath().getMinimumTravelTime()<D2.getPath().getMinimumTravelTime()) { court = D1; plusLong=D2; debut=debut2; }
-		else { court = D2; plusLong=D1; debut=debut1;}
+		int minFinal1= 0;
+		int minFinal2= 0;
+		int minFinal= 0;
+		
+		// A la première version de l'algorithme, l'algorithme cherchait à connecter le chemin le plus Long au plus Court en temps.
+		// Maintenant on ne soucie pas de la longueur, on teste toutes les possibilités de connexion entre les deux chemins optimaux pour être sur
+		// de ne manquer aucune solution. ( Je laisse le if du dessous au cas ou je voudrai revenir à l'ancienne version de l'algorithme ).
+		if (D1.getPath().getMinimumTravelTime()<D2.getPath().getMinimumTravelTime()) { court = D1; plusLong=D2; debut=debut2; debutprincipal=debut1; }
+		else { court = D2; plusLong=D1; debut=debut1; debutprincipal=debut2;}
+		
 		double tempsCourt=0;
+		double tempsLong=0;
 		double temps1=court.getPath().getMinimumTravelTime();
+		double temps2=plusLong.getPath().getMinimumTravelTime();
 		double Min = D1.getPath().getMinimumTravelTime() + D2.getPath().getMinimumTravelTime();
+		double MinCourt=Min;
+		double MinLong=Min;
 		List<Arc> arcsCourt = court.getPath().getArcs();
+		List<Arc> arcsLong = plusLong.getPath().getArcs();
 		for (int i=0; i<arcsCourt.size() ; i++)
 		{
 			
 			ShortestPathData dataCourt = new ShortestPathData(graph,graph.get(debut),arcsCourt.get(i).getDestination(),arcInspector1);
 			ShortestPathSolution solutionCourt =new DijkstraAlgorithm(dataCourt).run();
 			tempsCourt = (solutionCourt.getPath().getMinimumTravelTime() + temps1);
-			if (tempsCourt<Min) 
+			if (tempsCourt<MinCourt) 
 			{
-				minFinal=arcsCourt.get(i).getDestination().getId();
-				Min=tempsCourt;
+				minFinal1=arcsCourt.get(i).getDestination().getId();
+				MinCourt=tempsCourt;
 				
 			}
 			
 		}
-		if (Min==D1.getPath().getMinimumTravelTime() + D2.getPath().getMinimumTravelTime())
+		for (int j=0; j<arcsLong.size() ; j++)
+		{
+			
+			ShortestPathData dataLong = new ShortestPathData(graph,graph.get(debutprincipal),arcsLong.get(j).getDestination(),arcInspector1);
+			ShortestPathSolution solutionLong =new DijkstraAlgorithm(dataLong).run();
+			tempsLong = (solutionLong.getPath().getMinimumTravelTime() + temps2);
+			if (tempsLong<MinLong) 
+			{
+				minFinal2=arcsLong.get(j).getDestination().getId();
+				MinLong=tempsCourt;
+				
+			}
+			
+		}
+		if (MinCourt==Min && MinLong==Min)
 		{
 			System.out.println("Solution non blabla");
 		}
 		else
 		{
+			if (MinLong>MinCourt)
+			{
+				Min=MinCourt;
+				minFinal=minFinal1;
+			}
+			else
+			{
+				Min=MinLong;
+				minFinal=minFinal2;
+			}
 			System.out.println("U1 part de :"+ debut1 + " U2 part de : " + debut2);
-			System.out.println("Chemin principal au départ de "+ debut);
+			System.out.println("Chemin principal au départ de "+ debutprincipal);
 			System.out.println("Le point de rencontre est "+ minFinal);
 			System.out.println("La destination est : " +fin);
+			System.out.println("Duree d'utilisation des véhicules : " +Min);
 		}
 	}
 	
+	//Au vue des différents tests, il semble que la solution optimale soit toujours de connecter le chemin le plus
+	//long en temps au chemein le plus court en temps. Si c'est bien le cas, une de mes boucles for ne sert à rien.
 	@Test
 	public void	trouveSolution() throws IOException {
-	SolutionPb1(79911,110866,90028,"haute-garonne");	// 73071
+	SolutionPb1(87114,72579,14166,"haute-garonne");	// 73071
 		
 	}
 

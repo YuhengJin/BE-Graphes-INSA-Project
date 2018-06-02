@@ -127,7 +127,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         Collections.reverse(nodesFinal); // On inverse la liste
         // Renvoie des stats
         
-        //System.out.println("TasMax :"+ maxTas);					//Pour tester les performances
+        //System.out.println("TasMax :"+ maxTas);				//Pour tester les performances
         //System.out.println("Nb nodes visités : "+ nbVisite);	//Pour tester les performances
         // Create the final solution.
         if (data.getMode().name()=="LENGTH") { 
