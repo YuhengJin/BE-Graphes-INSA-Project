@@ -49,10 +49,10 @@ public class DijsktraSenarios {
 	@Test
 	public void	Scenario2() throws IOException { // Test des chemins en longueur avec des coordonnées de début et de fin aléatoires
 	initAll();
-	for (int i=0;i<100;i++)
+	for (int i=0;i<1000;i++)
 	{
-		for (int j=0; j<1;j++)
-		{
+		//for (int j=0; j<1;j++)
+		//{
 			Random r1=new Random();
 			Random r2=new Random();
 			int nb1 = r1.nextInt(1000); 
@@ -67,19 +67,19 @@ public class DijsktraSenarios {
 			assertEquals(D.getStatus(),B.getStatus());
 			if (D.getStatus()==Status.OPTIMAL)
     		{
-				assertEquals(D.getPath().getLength(),B.getPath().getLength(),1);
+				assertEquals(B.getPath().getLength(),D.getPath().getLength(),1);
     		}
-		}
+		//}
 	}
 	}
 	
 	@Test
 	public void	Scenario3() throws IOException { // Test des chemins en temps de parcours avec des coordonnées de début et de fin aléatoires
 	initAll();
-	for (int i=0;i<100;i++)
+	for (int i=0;i<1000;i++)
 	{
-		for (int j=0; j<1;j++)
-		{
+		//for (int j=0; j<1;j++)
+		//{
 
 			Random r1=new Random();
 			Random r2=new Random();
@@ -95,9 +95,9 @@ public class DijsktraSenarios {
 			assertEquals(D.getStatus(),B.getStatus());
 			if (D.getStatus()==Status.OPTIMAL)
     		{
-				assertEquals(D.getPath().getMinimumTravelTime(),B.getPath().getMinimumTravelTime(),1);
+				assertEquals(B.getPath().getMinimumTravelTime(),D.getPath().getMinimumTravelTime(),1);
     		}
-		}
+		//}
 	}
 	}
 }

@@ -17,29 +17,25 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
 		final int nbNodes = graph.size();
 		LabelStar[] labelList = new LabelStar[nbNodes];
 		Iterator<Node> nodes = graph.iterator();
-		int speed=graph.getGraphInformation().getMaximumSpeed();
+		LabelStar.setDest(data.getDestination());
+		LabelStar.setSpeed(graph.getGraphInformation().getMaximumSpeed());
 		if (data.getMode().name()=="TIME")
 		{
-			for ( int i=0; i<nbNodes; i++)
-	    	{
-			Node currentNode = nodes.next();
-	        labelList[i]=new LabelStar(Double.POSITIVE_INFINITY,null,currentNode,(currentNode.getPoint().distanceTo(data.getDestination().getPoint())/(speed/3.6)));
-	    	}
-			Node debut = data.getOrigin();
-			labelList[data.getOrigin().getId()] = new LabelStar(0,null,debut,debut.getPoint().distanceTo(data.getDestination().getPoint())/(speed/3.6));
-		}
-		else
-		{
+			LabelStar.setMode(-1);
 			
-			for ( int i=0; i<nbNodes; i++)
-	    	{
-			Node currentNode = nodes.next();
-	        labelList[i]=new LabelStar(Double.POSITIVE_INFINITY,null,currentNode,(currentNode.getPoint().distanceTo(data.getDestination().getPoint())));
-	    	}
 		}
-		
+		else 
+		{
+			LabelStar.setMode(-2);
+		}	
+		for ( int i=0; i<nbNodes; i++)
+	    {
+		Node currentNode = nodes.next();
+	    labelList[i]=new LabelStar(Double.POSITIVE_INFINITY,null,currentNode);
+	    }
 		Node debut = data.getOrigin();
-		labelList[data.getOrigin().getId()] = new LabelStar(0,null,debut,debut.getPoint().distanceTo(data.getDestination().getPoint()));
+		labelList[data.getOrigin().getId()] = new LabelStar(0,null,debut);
+		
 	    return labelList;    
 	}
 	

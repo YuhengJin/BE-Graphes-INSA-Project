@@ -123,7 +123,7 @@ import org.insa.graph.RoadInformation.RoadType;
 
 	    @Test
 	    public void testOnInsaMap() {
-	    	String mapName = "/home/commetud/3emeAnneMIC/Graphes-et-Algorithmes/Maps/insa.mapgr";
+	    	String mapName = "/home/loic/Documents/be_graphes/MAPS/insa.mapgr"; //"/home/commetud/3emeAnneMIC/Graphes-et-Algorithmes/Maps/insa.mapgr";
 
 	    	try
 	    	{

@@ -26,7 +26,7 @@ import org.insa.graph.io.BinaryGraphReader;
 
 	    @Test
 	    public void testOnInsaMap() {
-	    	String mapName = "/home/commetud/3emeAnneMIC/Graphes-et-Algorithmes/Maps/insa.mapgr";
+	    	String mapName = "/home/loic/Documents/be_graphes/MAPS/insa.mapgr";
 
 	    	try
 	    	{
