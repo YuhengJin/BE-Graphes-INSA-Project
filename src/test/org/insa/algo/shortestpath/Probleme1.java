@@ -76,14 +76,22 @@ public class Probleme1 {
 			}
 			
 		}
-		
-		System.out.println("Le point de rencontre est "+ minFinal);
-		
+		if (Min==D1.getPath().getMinimumTravelTime() + D2.getPath().getMinimumTravelTime())
+		{
+			System.out.println("Solution non blabla");
+		}
+		else
+		{
+			System.out.println("U1 part de :"+ debut1 + " U2 part de : " + debut2);
+			System.out.println("Chemin principal au départ de "+ debut);
+			System.out.println("Le point de rencontre est "+ minFinal);
+			System.out.println("La destination est : " +fin);
+		}
 	}
 	
 	@Test
 	public void	trouveSolution() throws IOException {
-	SolutionPb1(113873,73074,237328,"midi-pyrenees");	// 73071
+	SolutionPb1(79911,110866,90028,"haute-garonne");	// 73071
 		
 	}
 

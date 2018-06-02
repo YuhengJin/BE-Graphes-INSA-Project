@@ -10,7 +10,7 @@ import org.insa.graph.Node;
 
 public class AStarAlgorithm extends DijkstraAlgorithm {
 
-	public LabelStar[] initList() // Fonction pour initialiser la liste des labels initiaux que l'on pourra redéfinir pour A*
+	public LabelStar[] initList() // Redefinition de la fonction contenue dans la classe Dijkstra
 	{
 		ShortestPathData data = getInputData();
 		Graph graph = data.getGraph();
